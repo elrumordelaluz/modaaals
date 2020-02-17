@@ -1,5 +1,5 @@
 /** @jsx jsx */ import { css, jsx } from '@emotion/core'
-import React, { useRef } from 'react'
+import React, { useRef, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
@@ -10,19 +10,30 @@ import CloseIcon from './CloseIcon'
 const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
   const contentRef = useRef(null)
   const constraintsRef = useRef(null)
-  const { type: modalType, ...restProps }: ModalType = modal
+
+  const {
+    type: modalType,
+    focusRef,
+    enabledScroll,
+    ...restProps
+  }: ModalType = modal
     ? typeof modal === 'string'
       ? { type: modal }
       : modal
     : { type: null }
 
-  let modalProps = { closeModal, ...restProps }
+  let modalProps = { closeModal, focusRef, ...restProps }
 
-  console.log({ m: modals[modalType] })
+  const onActivationFocusLock = useCallback(() => {
+    if (focusRef && focusRef.current) {
+      focusRef.current.focus()
+    }
+  }, [focusRef])
+
   return modal ? (
     <Portal id="___portal" className="portal">
-      <FocusLock autoFocus returnFocus>
-        <RemoveScroll>
+      <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
+        <RemoveScroll enabled={!enabledScroll}>
           <div
             id="___overlay"
             onClick={closeModal}
@@ -59,8 +70,8 @@ const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
               box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15);
             `}
             ref={contentRef}
-            animate={{ opacity: 1, translateY: '-50%' }}
-            initial={{ translateX: '-50%', translateY: '-43%' }}
+            animate={{ translateY: '-50%' }}
+            initial={{ translateX: '-50%', translateY: '-50%' }}
             dragConstraints={constraintsRef}
             drag
           >
@@ -90,12 +101,12 @@ const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
             <div
               css={css`
                 padding: 83px 152px 68px;
+                max-height: 60vh;
+                overflow: auto;
               `}
             >
               {modalType && modals[modalType]
-                ? typeof modals[modalType] === 'function'
-                  ? modals[modalType]({ ...modalProps })
-                  : modals[modalType]
+                ? modals[modalType]({ ...modalProps })
                 : null}
             </div>
           </motion.div>
@@ -120,6 +131,8 @@ export interface ComponentsMap {
 
 export interface ModalType {
   type?: string | null
+  focusRef?: React.RefObject<any>
+  enabledScroll?: boolean
 }
 
 export default Modal
