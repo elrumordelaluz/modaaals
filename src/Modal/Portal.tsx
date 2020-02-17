@@ -9,7 +9,7 @@ const Portal: React.FC<PortalProps> = ({
   elem = 'modal-portal',
   className,
 }) => {
-  const [isVisible, setVisible] = useState(false)
+  const [, setVisible] = useState(false)
   let ref = useRef<HTMLElement | null>(null)
 
   useLayoutEffect(() => {
