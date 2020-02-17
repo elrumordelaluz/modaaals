@@ -18,13 +18,14 @@ const Modal: React.FC<ModalProps> = ({
   closeModal,
   skipMotion,
 }) => {
-  const contentRef = useRef(null)
   const constraintsRef = useRef(null)
 
   const {
     type: modalType,
     focusRef,
     enabledScroll,
+    drag,
+    dragConstraints,
     ...restProps
   }: ModalType = modal
     ? typeof modal === 'string'
@@ -56,7 +57,7 @@ const Modal: React.FC<ModalProps> = ({
               background-color: rgba(42, 38, 33, 0.5);
             `}
           >
-            <motion.div
+            <div
               ref={constraintsRef}
               css={css`
                 position: absolute;
@@ -67,45 +68,13 @@ const Modal: React.FC<ModalProps> = ({
               `}
             />
           </div>
-          <motion.div
-            id="___content"
-            css={css`
-              position: fixed;
-              border: 1px solid rgba(0, 0, 0, 0.2);
-              left: 50%;
-              top: 50%;
-              background-color: #fcf7f6;
-              overflow: auto;
-              border-radius: 24px;
-              box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15);
-            `}
-            ref={contentRef}
-            animate={{ translateY: '-50%' }}
-            initial={{ translateX: '-50%', translateY: '-50%' }}
-            dragConstraints={constraintsRef}
-            drag
+          <ModalContent
+            skipMotion={skipMotion}
+            constraints={dragConstraints}
+            constraintsRef={constraintsRef}
+            drag={drag}
           >
-            <button
-              css={css`
-                width: 16px;
-                height: 16px;
-                border: 0;
-                outline: 0;
-                background: none;
-                padding: 0;
-                color: #56595f;
-                cursor: pointer;
-                position: absolute;
-                top: 38px;
-                left: 38px;
-                transition: color 0.3s;
-                outline: 0 !important;
-                &:hover {
-                  color: var(--accent);
-                }
-              `}
-              onClick={closeModal}
-            >
+            <button css={closeButtonStyles} onClick={closeModal}>
               <CloseIcon />
             </button>
             {isValidElement(modal) ? (
@@ -113,9 +82,9 @@ const Modal: React.FC<ModalProps> = ({
             ) : (
               <div
                 css={css`
-                  padding: 83px 152px 68px;
-                  max-height: 60vh;
                   overflow: auto;
+                  max-height: 60vh;
+                  margin: 83px 152px 68px;
                 `}
               >
                 {modalType && typeof modals[modalType] !== 'undefined'
@@ -123,11 +92,48 @@ const Modal: React.FC<ModalProps> = ({
                   : null}
               </div>
             )}
-          </motion.div>
+          </ModalContent>
         </RemoveScroll>
       </FocusLock>
     </Portal>
   ) : null
+}
+
+const ModalContent: React.FC<ContentProps> = ({
+  skipMotion,
+  children,
+  constraints,
+  constraintsRef,
+  drag = true,
+}) => {
+  let dragConstraints =
+    constraints === undefined
+      ? constraintsRef
+        ? constraintsRef
+        : false
+      : constraints
+
+  return skipMotion ? (
+    <div css={contentStyles}>{children}</div>
+  ) : (
+    <motion.div
+      css={contentStyles}
+      animate={{ translateY: '-50%' }}
+      initial={{ translateX: '-50%', translateY: '-50%' }}
+      dragConstraints={dragConstraints}
+      drag={drag}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+export type ContentProps = {
+  skipMotion?: boolean
+  children?: React.ReactNode
+  drag?: DragType
+  constraints?: DragConstraintsType
+  constraintsRef?: React.RefObject<any>
 }
 
 export type ModalProps = {
@@ -148,6 +154,50 @@ export interface ModalType {
   type?: string | null
   focusRef?: React.RefObject<any>
   enabledScroll?: boolean
+  drag?: DragType
+  dragConstraints?: DragConstraintsType
 }
 
+export type DragType = boolean | 'x' | 'y' | undefined
+export type DragConstraintsType =
+  | false
+  | {
+      top?: number | undefined
+      right?: number | undefined
+      bottom?: number | undefined
+      left?: number | undefined
+    }
+  | React.RefObject<Element>
+  | undefined
+
 export default Modal
+
+const contentStyles = css`
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow: auto;
+  background-color: #fcf7f6;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 24px;
+  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15);
+`
+const closeButtonStyles = css`
+  width: 16px;
+  height: 16px;
+  border: 0;
+  outline: 0;
+  background: none;
+  padding: 0;
+  color: #56595f;
+  cursor: pointer;
+  position: absolute;
+  top: 38px;
+  left: 38px;
+  transition: color 0.3s;
+  outline: 0 !important;
+  &:hover {
+    color: var(--accent);
+  }
+`

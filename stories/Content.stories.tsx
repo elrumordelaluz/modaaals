@@ -44,7 +44,10 @@ function ExampleButtons() {
               type: 'extra-props',
               hola: 1,
               another: 'stuff',
+              lol: true,
               focusRef: ref,
+              drag: 'x',
+              dragConstraints: { top: -50, right: 0, bottom: 0, left: -50 },
             })
           }
         >
@@ -123,7 +126,7 @@ Basic.story = {
 
 export function Types() {
   return (
-    <ModalProvider skipMotion={false}>
+    <ModalProvider skipMotion>
       <ExampleTrigger />
     </ModalProvider>
   )

@@ -63,4 +63,5 @@ interface ProviderProps {
   defaultModal?: string
   modals?: ComponentsMap
   skipMotion?: boolean
+  classNames?: object
 }
