@@ -29,9 +29,9 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "name": "react-modal-motion",
+  "name": "modaaals",
   "author": "Lionel Tzatzkin",
-  "module": "dist/react-modal-motion.esm.js",
+  "module": "dist/modaaals.esm.js",
   "devDependencies": {
     "@babel/core": "7.8.4",
     "@emotion/babel-preset-css-prop": "10.0.27",
