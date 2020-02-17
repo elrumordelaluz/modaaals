@@ -1,5 +1,10 @@
 /** @jsx jsx */ import { css, jsx } from '@emotion/core'
-import React, { useRef, useCallback, createElement } from 'react'
+import React, {
+  useRef,
+  useCallback,
+  createElement,
+  isValidElement,
+} from 'react'
 import { motion } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
@@ -7,7 +12,12 @@ import { RemoveScroll } from 'react-remove-scroll'
 import Portal from './Portal'
 import CloseIcon from './CloseIcon'
 
-const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
+const Modal: React.FC<ModalProps> = ({
+  modals = {},
+  modal,
+  closeModal,
+  skipMotion,
+}) => {
   const contentRef = useRef(null)
   const constraintsRef = useRef(null)
 
@@ -31,7 +41,7 @@ const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
   }, [focusRef])
 
   return modal ? (
-    <Portal id="___portal" className="portal">
+    <Portal skipMotion={skipMotion}>
       <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
         <RemoveScroll enabled={!enabledScroll}>
           <div
@@ -98,17 +108,21 @@ const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
             >
               <CloseIcon />
             </button>
-            <div
-              css={css`
-                padding: 83px 152px 68px;
-                max-height: 60vh;
-                overflow: auto;
-              `}
-            >
-              {modalType && typeof modals[modalType] !== 'undefined'
-                ? createElement(modals[modalType], modalProps)
-                : null}
-            </div>
+            {isValidElement(modal) ? (
+              modal
+            ) : (
+              <div
+                css={css`
+                  padding: 83px 152px 68px;
+                  max-height: 60vh;
+                  overflow: auto;
+                `}
+              >
+                {modalType && typeof modals[modalType] !== 'undefined'
+                  ? createElement(modals[modalType], modalProps)
+                  : null}
+              </div>
+            )}
           </motion.div>
         </RemoveScroll>
       </FocusLock>
@@ -121,6 +135,7 @@ export type ModalProps = {
   children?: React.ReactNode
   modal: ModalOptions
   closeModal: () => void
+  skipMotion?: boolean
 }
 
 export type ModalOptions = null | string | {}

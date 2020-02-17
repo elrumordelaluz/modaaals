@@ -1,5 +1,5 @@
 /** @jsx jsx */ import { css, jsx } from '@emotion/core'
-import React, { useContext, useRef } from 'react'
+import { useContext, useRef } from 'react'
 import { ModalProvider, ModalContext } from '../src'
 import {
   StaticModal,
@@ -12,13 +12,15 @@ export default {
   title: 'Modal',
 }
 
-export const Basic = () => (
-  <ModalProvider modals={modals}>
-    <ExampleButtons />
-  </ModalProvider>
-)
+export function Basic() {
+  return (
+    <ModalProvider modals={modals}>
+      <ExampleButtons />
+    </ModalProvider>
+  )
+}
 
-const ExampleButtons = () => {
+function ExampleButtons() {
   const { openModal } = useContext(ModalContext)
   const ref = useRef(null)
   return (
@@ -117,4 +119,34 @@ const modals = {
 
 Basic.story = {
   name: 'Basic',
+}
+
+export function Types() {
+  return (
+    <ModalProvider skipMotion={false}>
+      <ExampleTrigger />
+    </ModalProvider>
+  )
+}
+
+function ExampleTrigger() {
+  const { openModal } = useContext(ModalContext)
+  return (
+    <button
+      onClick={() =>
+        openModal(
+          <div
+            css={css`
+              background: red;
+              padding: 100px;
+            `}
+          >
+            hola
+          </div>
+        )
+      }
+    >
+      open
+    </button>
+  )
 }

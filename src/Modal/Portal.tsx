@@ -1,13 +1,12 @@
-/** @jsx jsx */ import { css, jsx } from '@emotion/core'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const Portal: React.FC<PortalProps> = ({
   children,
-  id = 'portal',
-  elem = 'modal-portal',
-  className,
+  id = 'portaaal',
+  elem = 'modaaal',
+  skipMotion = false,
 }) => {
   const [, setVisible] = useState(false)
   let ref = useRef<HTMLElement | null>(null)
@@ -28,33 +27,28 @@ const Portal: React.FC<PortalProps> = ({
     }
   }, [elem])
 
-  return ref.current
-    ? createPortal(
-        <AnimatePresence>
-          <motion.div
-            className={className}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            css={css`
-              position: fixed;
-              z-index: 2000;
-              top: 0;
-              left: 0;
-              user-select: none;
-            `}
-          >
-            {children}
-          </motion.div>
-        </AnimatePresence>,
-        ref.current
-      )
-    : null
+  let toRender = skipMotion ? (
+    <React.Fragment>{children}</React.Fragment>
+  ) : (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  )
+
+  return ref.current ? createPortal(toRender, ref.current) : null
 }
 
 export default Portal
 
 export type PortalProps = {
+  id?: string
   children?: React.ReactNode
   elem?: string
-} & React.HTMLAttributes<HTMLDivElement>
+  skipMotion?: boolean
+}

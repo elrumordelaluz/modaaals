@@ -20,6 +20,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   children,
   defaultModal,
   modals,
+  skipMotion,
 }) => {
   const [modal, openModal] = useOpenClose(false)
   useEffect(() => {
@@ -42,7 +43,12 @@ const ModalProvider: React.FC<ProviderProps> = ({
         closeModal,
       }}
     >
-      <Modal modals={modals} modal={modal} closeModal={closeModal} />
+      <Modal
+        modals={modals}
+        modal={modal}
+        closeModal={closeModal}
+        skipMotion={skipMotion}
+      />
       {children}
     </ModalContext.Provider>
   )
@@ -56,4 +62,5 @@ interface ProviderProps {
   children?: React.ReactNode
   defaultModal?: string
   modals?: ComponentsMap
+  skipMotion?: boolean
 }
