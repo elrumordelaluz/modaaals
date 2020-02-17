@@ -1,6 +1,7 @@
+/** @jsx jsx */ import { css, jsx } from '@emotion/core'
 import React, { useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 
 const Portal: React.FC<PortalProps> = ({
   children,
@@ -29,13 +30,23 @@ const Portal: React.FC<PortalProps> = ({
 
   return ref.current
     ? createPortal(
-        <motion.div
-          className={className}
-          animate={{ opacity: isVisible ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
-        >
-          {children}
-        </motion.div>,
+        <AnimatePresence>
+          <motion.div
+            className={className}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            css={css`
+              position: fixed;
+              z-index: 2000;
+              top: 0;
+              left: 0;
+              user-select: none;
+            `}
+          >
+            {children}
+          </motion.div>
+        </AnimatePresence>,
         ref.current
       )
     : null

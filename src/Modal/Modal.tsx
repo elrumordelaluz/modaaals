@@ -1,14 +1,15 @@
-import React, { useContext, Suspense } from 'react'
+/** @jsx jsx */ import { css, jsx } from '@emotion/core'
+import React, { useRef } from 'react'
 import { motion } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
+
 import Portal from './Portal'
+import CloseIcon from './CloseIcon'
 
-import ModalContext from './Context'
-
-const Modal: React.FC<ModalProps> = ({ modals = {} }) => {
-  const { modal, closeModal } = useContext(ModalContext)
-
+const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
+  const contentRef = useRef(null)
+  const constraintsRef = useRef(null)
   const { type: modalType, ...restProps }: ModalType = modal
     ? typeof modal === 'string'
       ? { type: modal }
@@ -17,21 +18,86 @@ const Modal: React.FC<ModalProps> = ({ modals = {} }) => {
 
   let modalProps = { closeModal, ...restProps }
 
+  console.log({ m: modals[modalType] })
   return modal ? (
-    <Portal id="___modal" className="portal">
+    <Portal id="___portal" className="portal">
       <FocusLock autoFocus returnFocus>
         <RemoveScroll>
-          <motion.div className="modal">
-            <button className="closeButton" onClick={closeModal}>
-              x
+          <div
+            id="___overlay"
+            onClick={closeModal}
+            css={css`
+              position: fixed;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              left: 0;
+              background-color: rgba(42, 38, 33, 0.5);
+            `}
+          >
+            <motion.div
+              ref={constraintsRef}
+              css={css`
+                position: absolute;
+                top: 10vh;
+                right: 10vh;
+                bottom: 10vh;
+                left: 10vh;
+              `}
+            />
+          </div>
+          <motion.div
+            id="___content"
+            css={css`
+              position: fixed;
+              border: 1px solid rgba(0, 0, 0, 0.2);
+              left: 50%;
+              top: 50%;
+              background-color: #fcf7f6;
+              overflow: auto;
+              border-radius: 24px;
+              box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15);
+            `}
+            ref={contentRef}
+            animate={{ opacity: 1, translateY: '-50%' }}
+            initial={{ translateX: '-50%', translateY: '-43%' }}
+            dragConstraints={constraintsRef}
+            drag
+          >
+            <button
+              css={css`
+                width: 16px;
+                height: 16px;
+                border: 0;
+                outline: 0;
+                background: none;
+                padding: 0;
+                color: #56595f;
+                cursor: pointer;
+                position: absolute;
+                top: 38px;
+                left: 38px;
+                transition: color 0.3s;
+                outline: 0 !important;
+                &:hover {
+                  color: var(--accent);
+                }
+              `}
+              onClick={closeModal}
+            >
+              <CloseIcon />
             </button>
-            <Suspense fallback={<div>Loading...</div>}>
+            <div
+              css={css`
+                padding: 83px 152px 68px;
+              `}
+            >
               {modalType && modals[modalType]
                 ? typeof modals[modalType] === 'function'
                   ? modals[modalType]({ ...modalProps })
                   : modals[modalType]
                 : null}
-            </Suspense>
+            </div>
           </motion.div>
         </RemoveScroll>
       </FocusLock>
@@ -40,12 +106,13 @@ const Modal: React.FC<ModalProps> = ({ modals = {} }) => {
 }
 
 export type ModalProps = {
-  // isOpen?: boolean
   modals?: ComponentsMap
-  // onDismiss?: (event?: React.SyntheticEvent) => void
   children?: React.ReactNode
-  // initialFocusRef?: React.RefObject<any>
+  modal: ModalOptions
+  closeModal: () => void
 }
+
+export type ModalOptions = null | string | {}
 
 export interface ComponentsMap {
   [key: string]: any

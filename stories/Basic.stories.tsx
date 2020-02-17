@@ -1,30 +1,31 @@
-import React, { useContext } from 'react'
+import React, { useContext, lazy } from 'react'
 import { Modal, ModalProvider, ModalContext } from '../src'
+import { HelloModal } from './Modals'
 
 export default {
   title: 'Modal',
 }
 
 export const Basic = () => (
-  <ModalProvider>
-    <Modal modals={modals} />
-    <Component />
+  <ModalProvider modals={modals}>
+    <ExampleButtons />
   </ModalProvider>
 )
 
-const Component = () => {
+const ExampleButtons = () => {
   const { openModal } = useContext(ModalContext)
   return (
     <>
       <button onClick={() => openModal('hello')}>open hello</button>
       <button onClick={() => openModal('list')}>open list</button>
       <button onClick={() => openModal({ type: 'f', hola: 1 })}>open f</button>
+      <button onClick={() => openModal('empty')}>open empty</button>
     </>
   )
 }
 
 const modals = {
-  hello: <div>hello!</div>,
+  hello: HelloModal,
   list: (
     <ul>
       {['a', 'b', 'c'].map(_ => (

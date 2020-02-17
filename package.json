@@ -34,6 +34,7 @@
   "module": "dist/react-modal-motion.esm.js",
   "devDependencies": {
     "@babel/core": "7.8.4",
+    "@emotion/babel-preset-css-prop": "10.0.27",
     "@storybook/addon-actions": "5.3.13",
     "@storybook/addon-links": "5.3.13",
     "@storybook/addons": "5.3.13",
@@ -51,6 +52,7 @@
     "typescript": "3.7.5"
   },
   "dependencies": {
+    "@emotion/core": "10.0.27",
     "framer-motion": "1.8.4",
     "keycode-js": "2.0.3",
     "react-focus-lock": "2.2.1",

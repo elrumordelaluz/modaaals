@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { useOpenClose } from '../utils'
+import Modal, { ComponentsMap, ModalOptions } from './Modal'
 
 const defaultState = {
   modal: null,
@@ -13,11 +14,13 @@ interface ContextProps {
   closeModal: () => void
 }
 
-type ModalOptions = null | string | {}
-
 const ModalContext = React.createContext<ContextProps>(defaultState)
 
-const ModalProvider: React.FC<ProviderProps> = ({ children, defaultModal }) => {
+const ModalProvider: React.FC<ProviderProps> = ({
+  children,
+  defaultModal,
+  modals,
+}) => {
   const [modal, openModal] = useOpenClose(false)
   useEffect(() => {
     if (defaultModal) {
@@ -27,14 +30,19 @@ const ModalProvider: React.FC<ProviderProps> = ({ children, defaultModal }) => {
     }
   }, [openModal, defaultModal])
 
+  function closeModal() {
+    openModal(null)
+  }
+
   return (
     <ModalContext.Provider
       value={{
         modal,
         openModal,
-        closeModal: () => openModal(null),
+        closeModal,
       }}
     >
+      <Modal modals={modals} modal={modal} closeModal={closeModal} />
       {children}
     </ModalContext.Provider>
   )
@@ -47,4 +55,5 @@ export { ModalProvider }
 interface ProviderProps {
   children?: React.ReactNode
   defaultModal?: string
+  modals?: ComponentsMap
 }
