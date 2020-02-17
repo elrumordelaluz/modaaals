@@ -1,7 +1,12 @@
 /** @jsx jsx */ import { css, jsx } from '@emotion/core'
 import React, { useContext, useRef } from 'react'
 import { ModalProvider, ModalContext } from '../src'
-import { StaticModal, ExtraPropsModal, ParagraphsModal } from './Modals'
+import {
+  StaticModal,
+  ExtraPropsModal,
+  ParagraphsModal,
+  SideEffectsModal,
+} from './Modals'
 
 export default {
   title: 'Modal',
@@ -51,6 +56,11 @@ const ExampleButtons = () => {
           open paragraphs
         </button>
         <button onClick={() => openModal('empty')}>open empty</button>
+        <button
+          onClick={() => openModal({ type: 'side-effects', side: 'hola' })}
+        >
+          open side effects
+        </button>
       </header>
       <main>
         <p
@@ -102,6 +112,7 @@ const modals = {
   static: StaticModal,
   'extra-props': ExtraPropsModal,
   p: ParagraphsModal,
+  'side-effects': SideEffectsModal,
 }
 
 Basic.story = {

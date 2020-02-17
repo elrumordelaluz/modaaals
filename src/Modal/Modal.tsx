@@ -1,5 +1,5 @@
 /** @jsx jsx */ import { css, jsx } from '@emotion/core'
-import React, { useRef, useCallback } from 'react'
+import React, { useRef, useCallback, createElement } from 'react'
 import { motion } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
@@ -105,8 +105,8 @@ const Modal: React.FC<ModalProps> = ({ modals = {}, modal, closeModal }) => {
                 overflow: auto;
               `}
             >
-              {modalType && modals[modalType]
-                ? modals[modalType]({ ...modalProps })
+              {modalType && typeof modals[modalType] !== 'undefined'
+                ? createElement(modals[modalType], modalProps)
                 : null}
             </div>
           </motion.div>
