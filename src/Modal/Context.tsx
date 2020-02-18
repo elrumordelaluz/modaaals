@@ -5,6 +5,7 @@ import Modal, {
   ModalOptions,
   StylesObj,
   defaultStyles,
+  ExtraProps,
 } from './Modal'
 
 const defaultState = {
@@ -25,9 +26,10 @@ const ModalProvider: React.FC<ProviderProps> = ({
   children,
   defaultModal,
   modals,
-  skipMotion,
   styles = defaultStyles,
+  ...props
 }) => {
+  console.log({ props })
   const [modal, openModal] = useOpenClose(false)
   useEffect(() => {
     if (defaultModal) {
@@ -53,8 +55,8 @@ const ModalProvider: React.FC<ProviderProps> = ({
         modals={modals}
         modal={modal}
         closeModal={closeModal}
-        skipMotion={skipMotion}
         styles={styles}
+        {...props}
       />
       {children}
     </ModalContext.Provider>
@@ -65,11 +67,10 @@ export default ModalContext
 
 export { ModalProvider }
 
-interface ProviderProps {
+type ProviderProps = ExtraProps & {
   children?: React.ReactNode
   defaultModal?: string
   modals?: ComponentsMap
-  skipMotion?: boolean
   classNames?: object
   styles?: StylesObj
 }

@@ -17,6 +17,9 @@ const Modal: React.FC<ModalProps> = ({
   modal,
   closeModal,
   skipMotion,
+  drag,
+  dragConstraints,
+  enabledScroll,
   styles = defaultStyles,
 }) => {
   const constraintsRef = useRef(null)
@@ -24,9 +27,10 @@ const Modal: React.FC<ModalProps> = ({
   const {
     type: modalType,
     focusRef,
-    enabledScroll,
-    drag,
-    dragConstraints,
+    skipMotion: skipMotionOverride,
+    drag: dragOverride,
+    dragConstraints: dragConstraintsOverride,
+    enabledScroll: enabledScrollOverride,
     ...restProps
   }: SingleModalType = modal
     ? typeof modal === 'string'
@@ -51,20 +55,22 @@ const Modal: React.FC<ModalProps> = ({
     return base
   }
 
+  const dragValue =
+    dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
   return modal ? (
-    <Portal skipMotion={skipMotion}>
+    <Portal skipMotion={skipMotion || skipMotionOverride}>
       <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
-        <RemoveScroll enabled={!enabledScroll}>
+        <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
           <div onClick={closeModal} css={getStyles('overlay')}>
             <div ref={constraintsRef} css={getStyles('constraints')} />
           </div>
 
           <ModalContent
-            skipMotion={skipMotion}
-            dragConstraints={dragConstraints}
+            skipMotion={skipMotion || skipMotionOverride}
+            drag={dragValue}
+            dragConstraints={dragConstraints || dragConstraints}
             constraintsRef={constraintsRef}
             styles={getStyles('contentOuter')}
-            drag={drag}
           >
             <button css={getStyles('closeButton')} onClick={closeModal}>
               <CloseIcon />
@@ -90,7 +96,7 @@ const ModalContent: React.FC<ContentProps> = ({
   children,
   dragConstraints,
   constraintsRef,
-  drag = true,
+  drag,
   styles,
 }) => {
   let customDragConstraints =
