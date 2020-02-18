@@ -17,7 +17,7 @@ const Modal: React.FC<ModalProps> = ({
   modal,
   closeModal,
   skipMotion,
-  styles = {},
+  styles = defaultStyles,
 }) => {
   const constraintsRef = useRef(null)
 
@@ -28,7 +28,7 @@ const Modal: React.FC<ModalProps> = ({
     drag,
     dragConstraints,
     ...restProps
-  }: ModalType = modal
+  }: SingleModalType = modal
     ? typeof modal === 'string'
       ? { type: modal }
       : modal
@@ -42,24 +42,26 @@ const Modal: React.FC<ModalProps> = ({
     }
   }, [focusRef])
 
-  const getStyles = (key: string): {} => {
-    const base = defaultStyles[key]
+  const getStyles = (key: StylesKeys): {} => {
+    const base = defaultStyles[key]()
     base.boxSizing = 'border-box'
-    const custom = styles[key]
-    return custom ? custom(base) : base
+    if (styles[key]) {
+      return styles[key](base)
+    }
+    return base
   }
 
   return modal ? (
     <Portal skipMotion={skipMotion}>
       <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
         <RemoveScroll enabled={!enabledScroll}>
-          <div id="___overlay" onClick={closeModal} css={getStyles('overlay')}>
+          <div onClick={closeModal} css={getStyles('overlay')}>
             <div ref={constraintsRef} css={getStyles('constraints')} />
           </div>
 
           <ModalContent
             skipMotion={skipMotion}
-            constraints={dragConstraints}
+            dragConstraints={dragConstraints}
             constraintsRef={constraintsRef}
             styles={getStyles('contentOuter')}
             drag={drag}
@@ -86,17 +88,17 @@ const Modal: React.FC<ModalProps> = ({
 const ModalContent: React.FC<ContentProps> = ({
   skipMotion,
   children,
-  constraints,
+  dragConstraints,
   constraintsRef,
   drag = true,
   styles,
 }) => {
-  let dragConstraints =
-    constraints === undefined
+  let customDragConstraints =
+    dragConstraints === undefined
       ? constraintsRef
         ? constraintsRef
         : false
-      : constraints
+      : dragConstraints
 
   return skipMotion ? (
     <div css={styles}>{children}</div>
@@ -105,7 +107,7 @@ const ModalContent: React.FC<ContentProps> = ({
       css={styles}
       animate={{ translateY: '-50%' }}
       initial={{ translateX: '-50%', translateY: '-50%' }}
-      dragConstraints={dragConstraints}
+      dragConstraints={customDragConstraints}
       drag={drag}
     >
       {children}
@@ -113,26 +115,38 @@ const ModalContent: React.FC<ContentProps> = ({
   )
 }
 
-export type ContentProps = {
-  skipMotion?: boolean
+export type ContentProps = ExtraProps & {
   children?: React.ReactNode
-  drag?: DragType
-  constraints?: DragConstraintsType
   constraintsRef?: React.RefObject<any>
   styles?: InterpolationWithTheme<any>
 }
 
-export type StyleFn = {
-  [key: string]: (provided: React.CSSProperties) => React.CSSProperties
+export type StyleFn = (provided: React.CSSProperties) => React.CSSProperties
+
+export type StylesKeys =
+  | 'overlay'
+  | 'constraints'
+  | 'contentOuter'
+  | 'contentInner'
+  | 'closeButton'
+
+export type StylesObj = {
+  [key in StylesKeys]?: StyleFn
 }
 
-export type ModalProps = {
+export type ModalProps = ExtraProps & {
   modals?: ComponentsMap
   children?: React.ReactNode
   modal: ModalOptions
   closeModal: () => void
+  styles: StylesObj
+}
+
+export type ExtraProps = {
   skipMotion?: boolean
-  styles?: StyleFn
+  drag?: DragType
+  dragConstraints?: DragConstraintsType
+  enabledScroll?: boolean
 }
 
 export type ModalOptions = null | string | {}
@@ -141,12 +155,9 @@ export interface ComponentsMap {
   [key: string]: any
 }
 
-export interface ModalType {
+export type SingleModalType = ExtraProps & {
   type?: string | null
   focusRef?: React.RefObject<any>
-  enabledScroll?: boolean
-  drag?: DragType
-  dragConstraints?: DragConstraintsType
 }
 
 export type DragType = boolean | 'x' | 'y' | undefined
@@ -164,22 +175,22 @@ export type DragConstraintsType =
 export default Modal
 
 export const defaultStyles: { [key: string]: any } = {
-  overlay: {
+  overlay: () => ({
     position: 'fixed',
     top: 0,
     right: 0,
     bottom: 0,
     left: 0,
     backgroundColor: 'rgba(42, 38, 33, 0.5)',
-  },
-  constraints: {
+  }),
+  constraints: () => ({
     position: 'absolute',
     top: '10vh',
     right: '10vh',
     bottom: '10vh',
     left: '10vh',
-  },
-  contentOuter: {
+  }),
+  contentOuter: () => ({
     position: 'fixed',
     left: '50%',
     top: '50%',
@@ -191,13 +202,13 @@ export const defaultStyles: { [key: string]: any } = {
     borderColor: 'rgba(0, 0, 0, 0.2)',
     borderRadius: 24,
     boxShadow: '0 10px 60px rgba(0, 0, 0, 0.15)',
-  },
-  contentInner: {
+  }),
+  contentInner: () => ({
     overflow: 'auto',
     maxHeight: '60vh',
     margin: '83px 152px 68px',
-  },
-  closeButton: {
+  }),
+  closeButton: () => ({
     width: '16px',
     height: '16px',
     border: 0,
@@ -213,5 +224,5 @@ export const defaultStyles: { [key: string]: any } = {
     '&: hover': {
       color: 'var(--accent)',
     },
-  },
+  }),
 }

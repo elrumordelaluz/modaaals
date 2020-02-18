@@ -1,22 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-export default function SideEffectsModal({
-  closeModal,
-  focusRef,
-  side,
-  ...rest
-}) {
+export default function SideEffectsModal({ closeModal, side, ...rest }) {
+  const [str, setStr] = useState('loading…')
   useEffect(() => {
-    console.log({ side })
+    setTimeout(() => setStr(side), 1600)
   }, [side])
   return (
     <>
+      <p>{str}</p>
       <pre>
         <code>{JSON.stringify(rest, null, 2)}</code>
       </pre>
-      <button ref={focusRef} onClick={closeModal}>
-        close
-      </button>
     </>
   )
 }

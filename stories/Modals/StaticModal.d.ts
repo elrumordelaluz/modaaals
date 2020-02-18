@@ -1,2 +1,2 @@
 /// <reference types="react" />
-export default function StaticModal(): JSX.Element;
+export default function StaticModal(): JSX.Element
