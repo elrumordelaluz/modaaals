@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useOpenClose } from '../utils'
-import Modal, { ComponentsMap, ModalOptions } from './Modal'
+import Modal, { ComponentsMap, ModalOptions, StyleFn } from './Modal'
 
 const defaultState = {
   modal: null,
@@ -21,6 +21,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   defaultModal,
   modals,
   skipMotion,
+  styles,
 }) => {
   const [modal, openModal] = useOpenClose(false)
   useEffect(() => {
@@ -48,6 +49,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
         modal={modal}
         closeModal={closeModal}
         skipMotion={skipMotion}
+        styles={styles}
       />
       {children}
     </ModalContext.Provider>
@@ -64,4 +66,5 @@ interface ProviderProps {
   modals?: ComponentsMap
   skipMotion?: boolean
   classNames?: object
+  styles?: StyleFn
 }

@@ -14,7 +14,17 @@ export default {
 
 export function Basic() {
   return (
-    <ModalProvider modals={modals}>
+    <ModalProvider
+      modals={modals}
+      styles={{
+        constraints: provided => {
+          return {
+            ...provided,
+            left: 0,
+          }
+        },
+      }}
+    >
       <ExampleButtons />
     </ModalProvider>
   )
@@ -126,7 +136,32 @@ Basic.story = {
 
 export function Types() {
   return (
-    <ModalProvider skipMotion>
+    <ModalProvider
+      styles={{
+        contentOuter: pr => {
+          console.log({ pr })
+          return {
+            ...pr,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            transform: 'translate(0, 0)',
+            borderRadius: 0,
+          }
+        },
+        overlay: provided => {
+          return {
+            ...provided,
+            backgroundColor: 'rgba(255,0,0,.5)',
+          }
+        },
+        closeButton: base => ({
+          ...base,
+          color: 'white',
+        }),
+      }}
+      skipMotion
+    >
       <ExampleTrigger />
     </ModalProvider>
   )

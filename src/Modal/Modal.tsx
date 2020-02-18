@@ -1,4 +1,4 @@
-/** @jsx jsx */ import { css, jsx } from '@emotion/core'
+/** @jsx jsx */ import { jsx, InterpolationWithTheme } from '@emotion/core'
 import React, {
   useRef,
   useCallback,
@@ -17,6 +17,7 @@ const Modal: React.FC<ModalProps> = ({
   modal,
   closeModal,
   skipMotion,
+  styles = {},
 }) => {
   const constraintsRef = useRef(null)
 
@@ -41,52 +42,35 @@ const Modal: React.FC<ModalProps> = ({
     }
   }, [focusRef])
 
+  const getStyles = (key: string): {} => {
+    const base = defaultStyles[key]
+    base.boxSizing = 'border-box'
+    const custom = styles[key]
+    return custom ? custom(base) : base
+  }
+
   return modal ? (
     <Portal skipMotion={skipMotion}>
       <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
         <RemoveScroll enabled={!enabledScroll}>
-          <div
-            id="___overlay"
-            onClick={closeModal}
-            css={css`
-              position: fixed;
-              top: 0;
-              right: 0;
-              bottom: 0;
-              left: 0;
-              background-color: rgba(42, 38, 33, 0.5);
-            `}
-          >
-            <div
-              ref={constraintsRef}
-              css={css`
-                position: absolute;
-                top: 10vh;
-                right: 10vh;
-                bottom: 10vh;
-                left: 10vh;
-              `}
-            />
+          <div id="___overlay" onClick={closeModal} css={getStyles('overlay')}>
+            <div ref={constraintsRef} css={getStyles('constraints')} />
           </div>
+
           <ModalContent
             skipMotion={skipMotion}
             constraints={dragConstraints}
             constraintsRef={constraintsRef}
+            styles={getStyles('contentOuter')}
             drag={drag}
           >
-            <button css={closeButtonStyles} onClick={closeModal}>
+            <button css={getStyles('closeButton')} onClick={closeModal}>
               <CloseIcon />
             </button>
             {isValidElement(modal) ? (
               modal
             ) : (
-              <div
-                css={css`
-                  overflow: auto;
-                  max-height: 60vh;
-                  margin: 83px 152px 68px;
-                `}
-              >
+              <div css={getStyles('contentInner')}>
                 {modalType && typeof modals[modalType] !== 'undefined'
                   ? createElement(modals[modalType], modalProps)
                   : null}
@@ -105,6 +89,7 @@ const ModalContent: React.FC<ContentProps> = ({
   constraints,
   constraintsRef,
   drag = true,
+  styles,
 }) => {
   let dragConstraints =
     constraints === undefined
@@ -114,10 +99,10 @@ const ModalContent: React.FC<ContentProps> = ({
       : constraints
 
   return skipMotion ? (
-    <div css={contentStyles}>{children}</div>
+    <div css={styles}>{children}</div>
   ) : (
     <motion.div
-      css={contentStyles}
+      css={styles}
       animate={{ translateY: '-50%' }}
       initial={{ translateX: '-50%', translateY: '-50%' }}
       dragConstraints={dragConstraints}
@@ -134,6 +119,11 @@ export type ContentProps = {
   drag?: DragType
   constraints?: DragConstraintsType
   constraintsRef?: React.RefObject<any>
+  styles?: InterpolationWithTheme<any>
+}
+
+export type StyleFn = {
+  [key: string]: (provided: React.CSSProperties) => React.CSSProperties
 }
 
 export type ModalProps = {
@@ -142,6 +132,7 @@ export type ModalProps = {
   modal: ModalOptions
   closeModal: () => void
   skipMotion?: boolean
+  styles?: StyleFn
 }
 
 export type ModalOptions = null | string | {}
@@ -172,32 +163,55 @@ export type DragConstraintsType =
 
 export default Modal
 
-const contentStyles = css`
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  overflow: auto;
-  background-color: #fcf7f6;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 24px;
-  box-shadow: 0 10px 60px rgba(0, 0, 0, 0.15);
-`
-const closeButtonStyles = css`
-  width: 16px;
-  height: 16px;
-  border: 0;
-  outline: 0;
-  background: none;
-  padding: 0;
-  color: #56595f;
-  cursor: pointer;
-  position: absolute;
-  top: 38px;
-  left: 38px;
-  transition: color 0.3s;
-  outline: 0 !important;
-  &:hover {
-    color: var(--accent);
-  }
-`
+export const defaultStyles: { [key: string]: any } = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    backgroundColor: 'rgba(42, 38, 33, 0.5)',
+  },
+  constraints: {
+    position: 'absolute',
+    top: '10vh',
+    right: '10vh',
+    bottom: '10vh',
+    left: '10vh',
+  },
+  contentOuter: {
+    position: 'fixed',
+    left: '50%',
+    top: '50%',
+    transform: 'translate(-50%, -50%)',
+    overflow: 'auto',
+    background: '#fcf7f6',
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'rgba(0, 0, 0, 0.2)',
+    borderRadius: 24,
+    boxShadow: '0 10px 60px rgba(0, 0, 0, 0.15)',
+  },
+  contentInner: {
+    overflow: 'auto',
+    maxHeight: '60vh',
+    margin: '83px 152px 68px',
+  },
+  closeButton: {
+    width: '16px',
+    height: '16px',
+    border: 0,
+    outline: 0,
+    background: 'none',
+    padding: 0,
+    color: '#56595f',
+    cursor: 'pointer',
+    position: 'absolute',
+    top: '38px',
+    left: '38px',
+    transition: 'color 0.3s',
+    '&: hover': {
+      color: 'var(--accent)',
+    },
+  },
+}
