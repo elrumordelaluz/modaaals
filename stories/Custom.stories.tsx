@@ -129,6 +129,47 @@ export function CustomDragLocally() {
   )
 }
 
+CleanInnerAnimations.story = {
+  name: 'Clean Inner Animations Props Globally',
+}
+
+export function CleanInnerAnimations() {
+  return (
+    <ModalProvider
+      motionProps={{}}
+      modals={{ modal: StaticModal }}
+      styles={{
+        contentOuter: base => {
+          return {
+            ...base,
+            transform: 'translate(-50%, -50%)!important',
+          }
+        },
+      }}
+    >
+      <ModalLauncher modal={{ type: 'modal' }} label="Modal " />
+    </ModalProvider>
+  )
+}
+
+CustomAnimate.story = {
+  name: 'Custom Animate Props Globally',
+}
+
+export function CustomAnimate() {
+  return (
+    <ModalProvider
+      motionProps={{
+        animate: { top: '0', scale: 1, opacity: 1 },
+        initial: { top: '100px', translateX: '-50%', scale: 3, opacity: 0 },
+      }}
+      modals={{ modal: StaticModal }}
+    >
+      <ModalLauncher modal={{ type: 'modal' }} label="Modal " />
+    </ModalProvider>
+  )
+}
+
 // Styles.story = {
 //   name: 'Chat example',
 // }

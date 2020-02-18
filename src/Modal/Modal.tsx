@@ -5,7 +5,12 @@ import React, {
   createElement,
   isValidElement,
 } from 'react'
-import { motion } from 'framer-motion'
+import {
+  motion,
+  AnimationControls,
+  TargetAndTransition,
+  CustomValueType,
+} from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
 
@@ -20,6 +25,7 @@ const Modal: React.FC<ModalProps> = ({
   drag,
   dragConstraints,
   enabledScroll,
+  motionProps,
   styles = defaultStyles,
 }) => {
   const constraintsRef = useRef(null)
@@ -31,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({
     drag: dragOverride,
     dragConstraints: dragConstraintsOverride,
     enabledScroll: enabledScrollOverride,
+    motionProps: motionProspOverride,
     ...restProps
   }: SingleModalType = modal
     ? typeof modal === 'string'
@@ -68,9 +75,10 @@ const Modal: React.FC<ModalProps> = ({
           <ModalContent
             skipMotion={skipMotion || skipMotionOverride}
             drag={dragValue}
-            dragConstraints={dragConstraints || dragConstraints}
+            dragConstraints={dragConstraints || dragConstraintsOverride}
             constraintsRef={constraintsRef}
             styles={getStyles('contentOuter')}
+            motionProps={motionProps || motionProspOverride}
           >
             <button css={getStyles('closeButton')} onClick={closeModal}>
               <CloseIcon />
@@ -98,7 +106,12 @@ const ModalContent: React.FC<ContentProps> = ({
   constraintsRef,
   drag,
   styles,
+  motionProps = {
+    animate: { translateY: '-50%' },
+    initial: { translateX: '-50%', translateY: '-43%' },
+  },
 }) => {
+  console.log({ motionProps })
   let customDragConstraints =
     dragConstraints === undefined
       ? constraintsRef
@@ -111,10 +124,10 @@ const ModalContent: React.FC<ContentProps> = ({
   ) : (
     <motion.div
       css={styles}
-      animate={{ translateY: '-50%' }}
-      initial={{ translateX: '-50%', translateY: '-50%' }}
       dragConstraints={customDragConstraints}
       drag={drag}
+      initial
+      {...motionProps}
     >
       {children}
     </motion.div>
@@ -153,6 +166,17 @@ export type ExtraProps = {
   drag?: DragType
   dragConstraints?: DragConstraintsType
   enabledScroll?: boolean
+  motionProps?: MotionProps
+}
+
+export type MotionProps = {
+  animate?:
+    | string
+    | AnimationControls
+    | TargetAndTransition
+    | string[]
+    | undefined
+  initial?: any
 }
 
 export type ModalOptions = null | string | {}
