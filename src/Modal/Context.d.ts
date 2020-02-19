@@ -1,5 +1,5 @@
 import React from 'react';
-import { ComponentsMap, ModalOptions } from './Modal';
+import { ComponentsMap, ModalOptions, StylesObj, ExtraProps } from './Modal';
 interface ContextProps {
     modal: ModalOptions;
     openModal: (options: ModalOptions) => void;
@@ -9,8 +9,10 @@ declare const ModalContext: React.Context<ContextProps>;
 declare const ModalProvider: React.FC<ProviderProps>;
 export default ModalContext;
 export { ModalProvider };
-interface ProviderProps {
+declare type ProviderProps = ExtraProps & {
     children?: React.ReactNode;
     defaultModal?: string;
     modals?: ComponentsMap;
-}
+    classNames?: object;
+    styles?: StylesObj;
+};
