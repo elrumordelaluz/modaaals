@@ -5,12 +5,7 @@ import React, {
   createElement,
   isValidElement,
 } from 'react'
-import {
-  motion,
-  AnimationControls,
-  TargetAndTransition,
-  CustomValueType,
-} from 'framer-motion'
+import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
 import { RemoveScroll } from 'react-remove-scroll'
 
