@@ -106,7 +106,6 @@ const ModalContent: React.FC<ContentProps> = ({
     initial: { translateX: '-50%', translateY: '-43%' },
   },
 }) => {
-  console.log({ motionProps })
   let customDragConstraints =
     dragConstraints === undefined
       ? constraintsRef

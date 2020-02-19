@@ -29,7 +29,6 @@ const ModalProvider: React.FC<ProviderProps> = ({
   styles = defaultStyles,
   ...props
 }) => {
-  console.log({ props })
   const [modal, openModal] = useOpenClose(false)
   useEffect(() => {
     if (defaultModal) {
