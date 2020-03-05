@@ -1,1 +1,1 @@
-export declare function useOpenClose(initialValue?: any): any[];
+export declare function useOpenClose(initialValue?: any, disabled?: boolean): any[];

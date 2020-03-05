@@ -1,4 +1,3 @@
-/// <reference types="react" />
 declare const _default: {
     title: string;
 };
@@ -35,6 +34,12 @@ export declare namespace CleanInnerAnimations {
 }
 export declare function CustomAnimate(): JSX.Element;
 export declare namespace CustomAnimate {
+    var story: {
+        name: string;
+    };
+}
+export declare function DisableClose(): JSX.Element;
+export declare namespace DisableClose {
     var story: {
         name: string;
     };

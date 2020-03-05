@@ -4,6 +4,8 @@ interface ContextProps {
     modal: ModalOptions;
     openModal: (options: ModalOptions) => void;
     closeModal: () => void;
+    setDisabled: (val: true | false) => void;
+    isDisabled: true | false;
 }
 declare const ModalContext: React.Context<ContextProps>;
 declare const ModalProvider: React.FC<ProviderProps>;
