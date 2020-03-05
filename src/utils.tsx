@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { KEY_ESCAPE } from 'keycode-js'
 
-export function useOpenClose(initialValue: any = false) {
+export function useOpenClose(
+  initialValue: any = false,
+  disabled: boolean = false
+) {
   const [isOpen, setOpen] = useState(initialValue)
 
   useEffect(() => {
     const handleEvent = (e: KeyboardEvent) => {
-      if (e.keyCode === KEY_ESCAPE) {
+      if (e.keyCode === KEY_ESCAPE && !disabled) {
         e.preventDefault()
         setOpen(false)
       }
@@ -17,7 +20,7 @@ export function useOpenClose(initialValue: any = false) {
     return () => {
       document.removeEventListener('keydown', handleEvent)
     }
-  }, [isOpen])
+  }, [isOpen, disabled])
 
   return [isOpen, setOpen]
 }

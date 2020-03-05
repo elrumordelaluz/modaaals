@@ -1,6 +1,11 @@
 import React, { useState } from 'react'
 import { ModalProvider } from '../src'
-import { ModalLauncher, StaticModal, ExtraPropsModal } from './Modals'
+import {
+  ModalLauncher,
+  ModalLauncherWithTimer,
+  StaticModal,
+  ExtraPropsModal,
+} from './Modals'
 
 export default {
   title: 'Custom Modals',
@@ -166,6 +171,28 @@ export function CustomAnimate() {
       modals={{ modal: StaticModal }}
     >
       <ModalLauncher modal={{ type: 'modal' }} label="Modal " />
+    </ModalProvider>
+  )
+}
+
+DisableClose.story = {
+  name: 'Disable Close',
+}
+
+export function DisableClose() {
+  return (
+    <ModalProvider
+      motionProps={{
+        animate: { top: '0', scale: 1, opacity: 1 },
+        initial: { top: '100px', translateX: '-50%', scale: 3, opacity: 0 },
+      }}
+      modals={{ modal: StaticModal }}
+    >
+      <ModalLauncherWithTimer
+        time={10000}
+        modal={{ type: 'modal' }}
+        label="Modal"
+      />
     </ModalProvider>
   )
 }
