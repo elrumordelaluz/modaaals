@@ -38,8 +38,14 @@ export declare namespace CustomAnimate {
         name: string;
     };
 }
-export declare function DisableClose(): JSX.Element;
-export declare namespace DisableClose {
+export declare function DisableCloseFromLauncher(): JSX.Element;
+export declare namespace DisableCloseFromLauncher {
+    var story: {
+        name: string;
+    };
+}
+export declare function DisableCloseFromModal(): JSX.Element;
+export declare namespace DisableCloseFromModal {
     var story: {
         name: string;
     };

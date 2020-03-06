@@ -1,5 +1,5 @@
 /** @jsx jsx */ import { InterpolationWithTheme } from '@emotion/core';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AnimationControls, TargetAndTransition } from 'framer-motion';
 declare const Modal: React.FC<ModalProps>;
 export declare type ContentProps = ExtraProps & {
@@ -17,6 +17,8 @@ export declare type ModalProps = ExtraProps & {
     children?: React.ReactNode;
     modal: ModalOptions;
     closeModal: () => void;
+    isDisabled: boolean;
+    setDisabled: Dispatch<SetStateAction<boolean>>;
     styles: StylesObj;
 };
 export declare type ExtraProps = {
