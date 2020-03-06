@@ -5,6 +5,7 @@ import {
   ModalLauncherWithTimer,
   StaticModal,
   ExtraPropsModal,
+  DisableModal,
 } from './Modals'
 
 export default {
@@ -175,24 +176,30 @@ export function CustomAnimate() {
   )
 }
 
-DisableClose.story = {
-  name: 'Disable Close',
+DisableCloseFromLauncher.story = {
+  name: 'Disable Close From Launcher',
 }
 
-export function DisableClose() {
+export function DisableCloseFromLauncher() {
   return (
-    <ModalProvider
-      motionProps={{
-        animate: { top: '0', scale: 1, opacity: 1 },
-        initial: { top: '100px', translateX: '-50%', scale: 3, opacity: 0 },
-      }}
-      modals={{ modal: StaticModal }}
-    >
+    <ModalProvider modals={{ modal: StaticModal }}>
       <ModalLauncherWithTimer
         time={10000}
         modal={{ type: 'modal' }}
         label="Modal"
       />
+    </ModalProvider>
+  )
+}
+
+DisableCloseFromModal.story = {
+  name: 'Disable Close From Inner Modal',
+}
+
+export function DisableCloseFromModal() {
+  return (
+    <ModalProvider modals={{ modal: DisableModal }}>
+      <ModalLauncher modal={{ type: 'modal' }} label="Modal " />
     </ModalProvider>
   )
 }

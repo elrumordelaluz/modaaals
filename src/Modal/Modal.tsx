@@ -4,6 +4,8 @@ import React, {
   useCallback,
   createElement,
   isValidElement,
+  Dispatch,
+  SetStateAction,
 } from 'react'
 import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
 import FocusLock from 'react-focus-lock'
@@ -16,6 +18,8 @@ const Modal: React.FC<ModalProps> = ({
   modals = {},
   modal,
   closeModal,
+  isDisabled,
+  setDisabled,
   skipMotion,
   drag,
   dragConstraints,
@@ -40,7 +44,13 @@ const Modal: React.FC<ModalProps> = ({
       : modal
     : { type: null }
 
-  let modalProps = { closeModal, focusRef, ...restProps }
+  let modalProps = {
+    closeModal,
+    isDisabled,
+    setDisabled,
+    focusRef,
+    ...restProps,
+  }
 
   const onActivationFocusLock = useCallback(() => {
     if (focusRef && focusRef.current) {
@@ -152,6 +162,8 @@ export type ModalProps = ExtraProps & {
   children?: React.ReactNode
   modal: ModalOptions
   closeModal: () => void
+  isDisabled: boolean
+  setDisabled: Dispatch<SetStateAction<boolean>>
   styles: StylesObj
 }
 

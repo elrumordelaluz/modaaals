@@ -19,7 +19,12 @@ export function ModalLauncherWithTimer({
   ...props
 }) {
   const { openModal, isDisabled, setDisabled } = useContext(ModalContext)
-  useTimeout(() => setDisabled(false), time)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDisabled(false)
+    }, time)
+    return () => clearTimeout(timer)
+  }, [isDisabled])
 
   return (
     <>
@@ -38,24 +43,3 @@ export function ModalLauncherWithTimer({
 }
 
 export default ModalLauncher
-
-// from https://github.com/siddharthkp/use-timeout
-function useTimeout(callback, delay) {
-  const savedCallback = useRef()
-
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback
-  }, [callback])
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current()
-    }
-    if (delay !== null) {
-      const id = setTimeout(tick, delay)
-      return () => clearTimeout(id)
-    }
-  }, [delay])
-}

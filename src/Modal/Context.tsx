@@ -33,8 +33,8 @@ const ModalProvider: React.FC<ProviderProps> = ({
   styles = defaultStyles,
   ...props
 }) => {
-  const [disabled, setDisabled] = useState(false)
-  const [modal, openModal] = useOpenClose(false, disabled)
+  const [isDisabled, setDisabled] = useState(false)
+  const [modal, openModal] = useOpenClose(false, isDisabled)
 
   useEffect(() => {
     if (defaultModal) {
@@ -45,7 +45,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   }, [openModal, defaultModal])
 
   function closeModal() {
-    if (!disabled) openModal(null)
+    if (!isDisabled) openModal(null)
   }
 
   return (
@@ -55,13 +55,15 @@ const ModalProvider: React.FC<ProviderProps> = ({
         openModal,
         closeModal,
         setDisabled,
-        isDisabled: disabled,
+        isDisabled,
       }}
     >
       <Modal
         modals={modals}
         modal={modal}
         closeModal={closeModal}
+        isDisabled={isDisabled}
+        setDisabled={setDisabled}
         styles={styles}
         {...props}
       />
