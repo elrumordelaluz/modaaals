@@ -64,7 +64,7 @@ CustomDragGlobally.story = {
 }
 
 export function CustomDragGlobally() {
-  const [drag, setDrag] = useState()
+  const [drag, setDrag] = useState<'x' | 'y' | boolean>()
   return (
     <>
       Global Drag Values:{' '}
