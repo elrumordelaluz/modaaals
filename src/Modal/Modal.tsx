@@ -6,7 +6,11 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react'
-import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
+import {
+  // motion,
+  AnimationControls,
+  TargetAndTransition,
+} from 'framer-motion'
 import { FocusScope } from '@react-aria/focus'
 import { RemoveScroll } from 'react-remove-scroll'
 
@@ -98,37 +102,38 @@ const Modal: React.FC<ModalProps> = ({
 }
 
 const ModalContent: React.FC<ContentProps> = ({
-  skipMotion,
+  // skipMotion,
   children,
-  dragConstraints,
-  constraintsRef,
-  drag,
+  // dragConstraints,
+  // constraintsRef,
+  // drag,
   styles,
-  motionProps = {
-    animate: { translateY: '-50%' },
-    initial: { translateX: '-50%', translateY: '-43%' },
-  },
+  // motionProps = {
+  //   animate: { translateY: '-50%' },
+  //   initial: { translateX: '-50%', translateY: '-43%' },
+  // },
 }) => {
-  let customDragConstraints =
-    dragConstraints === undefined
-      ? constraintsRef
-        ? constraintsRef
-        : false
-      : dragConstraints
+  // let customDragConstraints =
+  //   dragConstraints === undefined
+  //     ? constraintsRef
+  //       ? constraintsRef
+  //       : false
+  //     : dragConstraints
 
-  return skipMotion ? (
-    <div css={styles}>{children}</div>
-  ) : (
-    <motion.div
-      css={styles}
-      dragConstraints={customDragConstraints}
-      drag={drag}
-      initial
-      {...motionProps}
-    >
-      {children}
-    </motion.div>
-  )
+  return <div css={styles}>{children}</div>
+  // return skipMotion ? (
+  //   <div css={styles}>{children}</div>
+  // ) : (
+  //   <motion.div
+  //     css={styles}
+  //     dragConstraints={customDragConstraints}
+  //     drag={drag}
+  //     initial
+  //     {...motionProps}
+  //   >
+  //     {children}
+  //   </motion.div>
+  // )
 }
 
 export type ContentProps = ExtraProps & {
