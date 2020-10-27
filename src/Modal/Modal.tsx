@@ -1,14 +1,13 @@
 /** @jsx jsx */ import { jsx, InterpolationWithTheme } from '@emotion/core'
 import React, {
   useRef,
-  useCallback,
   createElement,
   isValidElement,
   Dispatch,
   SetStateAction,
 } from 'react'
 import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
-import FocusLock from 'react-focus-lock'
+import { FocusScope } from '@react-aria/focus'
 import { RemoveScroll } from 'react-remove-scroll'
 
 import Portal from './Portal'
@@ -52,12 +51,6 @@ const Modal: React.FC<ModalProps> = ({
     ...restProps,
   }
 
-  const onActivationFocusLock = useCallback(() => {
-    if (focusRef && focusRef.current) {
-      focusRef.current.focus()
-    }
-  }, [focusRef])
-
   const getStyles = (key: StylesKeys): {} => {
     const base = defaultStyles[key]()
     base.boxSizing = 'border-box'
@@ -71,7 +64,7 @@ const Modal: React.FC<ModalProps> = ({
     dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
   return modal ? (
     <Portal skipMotion={skipMotion || skipMotionOverride}>
-      <FocusLock autoFocus returnFocus onActivation={onActivationFocusLock}>
+      <FocusScope contain autoFocus restoreFocus>
         <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
           <div onClick={closeModal} css={getStyles('overlay')}>
             <div ref={constraintsRef} css={getStyles('constraints')} />
@@ -99,7 +92,7 @@ const Modal: React.FC<ModalProps> = ({
             )}
           </ModalContent>
         </RemoveScroll>
-      </FocusLock>
+      </FocusScope>
     </Portal>
   ) : null
 }

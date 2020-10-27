@@ -41,7 +41,7 @@ SkipMotionLocally.story = {
 
 export function SkipMotionLocally() {
   return (
-    <ModalProvider modals={{ 1: StaticModal, 2: ExtraPropsModal }}>
+    <ModalProvider modals={{ 1: StaticModal, 2: ExtraPropsModal }} s>
       <ModalLauncher
         modal={{
           type: 1,
