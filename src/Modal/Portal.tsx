@@ -25,7 +25,7 @@ const Portal: React.FC<PortalProps> = ({
         document.body.removeChild(ref.current)
       }
     }
-  }, [elem])
+  }, [elem, id])
 
   let toRender = skipMotion ? (
     <React.Fragment>{children}</React.Fragment>

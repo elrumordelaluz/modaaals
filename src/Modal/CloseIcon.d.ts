@@ -1,3 +1,3 @@
-import React from 'react';
-declare const CloseIcon: React.FC;
-export default CloseIcon;
+import React from 'react'
+declare const CloseIcon: React.FC
+export default CloseIcon
