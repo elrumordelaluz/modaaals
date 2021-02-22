@@ -16,6 +16,7 @@ import CloseIcon from './CloseIcon'
 const Modal: React.FC<ModalProps> = ({
   modals = {},
   modal,
+  openModal,
   closeModal,
   isDisabled,
   setDisabled,
@@ -44,6 +45,7 @@ const Modal: React.FC<ModalProps> = ({
     : { type: null }
 
   let modalProps = {
+    openModal,
     closeModal,
     isDisabled,
     setDisabled,
@@ -155,6 +157,7 @@ export type ModalProps = ExtraProps & {
   children?: React.ReactNode
   modal: ModalOptions
   closeModal: () => void
+  openModal: () => void
   isDisabled: boolean
   setDisabled: Dispatch<SetStateAction<boolean>>
   styles: StylesObj

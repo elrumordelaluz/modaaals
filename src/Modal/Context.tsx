@@ -62,6 +62,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
         modals={modals}
         modal={modal}
         closeModal={closeModal}
+        openModal={openModal}
         isDisabled={isDisabled}
         setDisabled={setDisabled}
         styles={styles}

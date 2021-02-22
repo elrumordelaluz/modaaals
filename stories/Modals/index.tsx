@@ -3,6 +3,8 @@ export { default as ExtraPropsModal } from './ExtraPropsModal'
 export { default as ParagraphsModal } from './ParagraphsModal'
 export { default as SideEffectsModal } from './SideEffectsModal'
 export { default as DisableModal } from './DisableModal'
+export { default as SwitchModal } from './SwitchModal'
+export { default as AnotherModal } from './SwitchModalAnother'
 export {
   default as ModalLauncher,
   ModalLauncherWithTimer,

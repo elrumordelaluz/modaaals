@@ -6,6 +6,8 @@ import {
   StaticModal,
   ExtraPropsModal,
   DisableModal,
+  SwitchModal,
+  AnotherModal,
 } from './Modals'
 
 export default {
@@ -41,7 +43,7 @@ SkipMotionLocally.story = {
 
 export function SkipMotionLocally() {
   return (
-    <ModalProvider modals={{ 1: StaticModal, 2: ExtraPropsModal }} s>
+    <ModalProvider modals={{ 1: StaticModal, 2: ExtraPropsModal }}>
       <ModalLauncher
         modal={{
           type: 1,
@@ -200,6 +202,18 @@ export function DisableCloseFromModal() {
   return (
     <ModalProvider modals={{ modal: DisableModal }}>
       <ModalLauncher modal={{ type: 'modal' }} label="Modal " />
+    </ModalProvider>
+  )
+}
+
+LaunchAnother.story = {
+  name: 'Launch another Modal from inside Modal',
+}
+
+export function LaunchAnother() {
+  return (
+    <ModalProvider modals={{ switch: SwitchModal, another: AnotherModal }}>
+      <ModalLauncher modal={{ type: 'switch' }} label="Modal " />
     </ModalProvider>
   )
 }
