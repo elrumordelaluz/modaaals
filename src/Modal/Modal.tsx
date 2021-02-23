@@ -26,6 +26,7 @@ const Modal: React.FC<ModalProps> = ({
   enabledScroll,
   motionProps,
   styles = defaultStyles,
+  portalStyle = {},
 }) => {
   const constraintsRef = useRef(null)
 
@@ -65,7 +66,7 @@ const Modal: React.FC<ModalProps> = ({
   const dragValue =
     dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
   return modal ? (
-    <Portal skipMotion={skipMotion || skipMotionOverride}>
+    <Portal skipMotion={skipMotion || skipMotionOverride} style={portalStyle}>
       <FocusScope contain autoFocus restoreFocus>
         <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
           <div onClick={closeModal} css={getStyles('overlay')}>
@@ -161,6 +162,7 @@ export type ModalProps = ExtraProps & {
   isDisabled: boolean
   setDisabled: Dispatch<SetStateAction<boolean>>
   styles: StylesObj
+  portalStyle?: React.CSSProperties
 }
 
 export type ExtraProps = {

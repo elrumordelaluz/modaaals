@@ -7,6 +7,7 @@ const Portal: React.FC<PortalProps> = ({
   id = 'portaaal',
   elem = 'modaaal',
   skipMotion = false,
+  style = {},
 }) => {
   const [, setVisible] = useState(false)
   let ref = useRef<HTMLElement | null>(null)
@@ -35,6 +36,7 @@ const Portal: React.FC<PortalProps> = ({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
+        style={style}
       >
         {children}
       </motion.div>
@@ -51,4 +53,5 @@ export type PortalProps = {
   children?: React.ReactNode
   elem?: string
   skipMotion?: boolean
+  style?: React.CSSProperties
 }
