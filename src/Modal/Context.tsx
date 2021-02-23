@@ -31,6 +31,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   defaultModal,
   modals,
   styles = defaultStyles,
+  portalStyle,
   ...props
 }) => {
   const [isDisabled, setDisabled] = useState(false)
@@ -66,6 +67,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
         isDisabled={isDisabled}
         setDisabled={setDisabled}
         styles={styles}
+        portalStyle={portalStyle}
         {...props}
       />
       {children}
@@ -81,6 +83,7 @@ type ProviderProps = ExtraProps & {
   children?: React.ReactNode
   defaultModal?: string
   modals?: ComponentsMap
-  classNames?: object
+  // classNames?: object
   styles?: StylesObj
+  portalStyle?: React.CSSProperties
 }

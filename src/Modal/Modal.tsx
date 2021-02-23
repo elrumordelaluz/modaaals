@@ -26,7 +26,7 @@ const Modal: React.FC<ModalProps> = ({
   enabledScroll,
   motionProps,
   styles = defaultStyles,
-  portalStyle = {},
+  portalStyle,
 }) => {
   const constraintsRef = useRef(null)
 
