@@ -53,7 +53,7 @@
   },
   "dependencies": {
     "@emotion/core": "10.0.27",
-    "@react-aria/focus": "3.2.2",
+    "@react-aria/focus": "3.2.4",
     "framer-motion": "1.8.4",
     "keycode-js": "2.0.3",
     "react-remove-scroll": "2.2.0"
