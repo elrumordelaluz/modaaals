@@ -32,6 +32,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   modals,
   styles = defaultStyles,
   portalStyle,
+  onCloseModal,
   ...props
 }) => {
   const [isDisabled, setDisabled] = useState(false)
@@ -46,7 +47,10 @@ const ModalProvider: React.FC<ProviderProps> = ({
   }, [openModal, defaultModal])
 
   function closeModal() {
-    if (!isDisabled) openModal(null)
+    if (!isDisabled) {
+      onCloseModal()
+      openModal(null)
+    }
   }
 
   return (
@@ -86,4 +90,5 @@ type ProviderProps = ExtraProps & {
   // classNames?: object
   styles?: StylesObj
   portalStyle?: React.CSSProperties
+  onCloseModal: () => void
 }
