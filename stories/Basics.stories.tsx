@@ -19,7 +19,7 @@ Simple.story = {
 
 export function Simple() {
   return (
-    <ModalProvider modals={{ simple: StaticModal }}>
+    <ModalProvider modals={{ simple: StaticModal }} className="holaaaa">
       <ModalLauncher modal="simple" label="Open Simple Modal" />
     </ModalProvider>
   )

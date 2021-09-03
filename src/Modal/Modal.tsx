@@ -27,6 +27,7 @@ const Modal: React.FC<ModalProps> = ({
   motionProps,
   styles = defaultStyles,
   portalStyle,
+  className,
 }) => {
   const constraintsRef = useRef(null)
 
@@ -80,6 +81,7 @@ const Modal: React.FC<ModalProps> = ({
             constraintsRef={constraintsRef}
             styles={getStyles('contentOuter')}
             motionProps={motionProps || motionProspOverride}
+            className={className}
           >
             <button css={getStyles('closeButton')} onClick={closeModal}>
               <CloseIcon />
@@ -107,6 +109,7 @@ const ModalContent: React.FC<ContentProps> = ({
   constraintsRef,
   drag,
   styles,
+  className,
   motionProps = {
     animate: { translateY: '-50%' },
     initial: { translateX: '-50%', translateY: '-43%' },
@@ -120,12 +123,15 @@ const ModalContent: React.FC<ContentProps> = ({
       : dragConstraints
 
   return skipMotion ? (
-    <div css={styles}>{children}</div>
+    <div css={styles} className={className}>
+      {children}
+    </div>
   ) : (
     <motion.div
       css={styles}
       dragConstraints={customDragConstraints}
       drag={drag}
+      className={className}
       initial
       {...motionProps}
     >
@@ -171,6 +177,7 @@ export type ExtraProps = {
   dragConstraints?: DragConstraintsType
   enabledScroll?: boolean
   motionProps?: MotionProps
+  className?: string
 }
 
 export type MotionProps = {
