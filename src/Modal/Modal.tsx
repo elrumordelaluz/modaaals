@@ -1,4 +1,7 @@
-/** @jsx jsx */ import { jsx, InterpolationWithTheme } from '@emotion/core'
+/** @jsxRuntime classic */ /** @jsx jsx */ import {
+  jsx,
+  Interpolation,
+} from '@emotion/react'
 import React, {
   useRef,
   createElement,
@@ -143,7 +146,7 @@ const ModalContent: React.FC<ContentProps> = ({
 export type ContentProps = ExtraProps & {
   children?: React.ReactNode
   constraintsRef?: React.RefObject<any>
-  styles?: InterpolationWithTheme<any>
+  styles?: Interpolation<React.CSSProperties>
 }
 
 export type StyleFn = (provided: React.CSSProperties) => React.CSSProperties

@@ -1,6 +1,7 @@
-/** @jsx jsx */ import { css, jsx } from '@emotion/core'
-import { useContext, useRef } from 'react'
-import { ModalProvider, ModalContext } from '../src'
+import { css } from '@emotion/react'
+import React, { useRef } from 'react'
+import { Meta } from '@storybook/react'
+import { ModalProvider } from '..'
 import {
   StaticModal,
   ExtraPropsModal,
@@ -10,23 +11,19 @@ import {
 } from './Modals'
 
 export default {
-  title: 'Modal Basics',
-}
+  title: 'Modal/Basics',
+} as Meta
 
-Simple.story = {
-  name: 'Simple',
-}
-
-export function Simple() {
+export const Simple = () => {
   return (
     <ModalProvider modals={{ simple: StaticModal }} className="holaaaa">
       <ModalLauncher modal="simple" label="Open Simple Modal" />
     </ModalProvider>
   )
 }
-
-ExtraProps.story = {
-  name: 'Extra Props',
+Simple.args = {
+  primary: true,
+  label: 'Simple',
 }
 
 export function ExtraProps() {
@@ -47,8 +44,9 @@ export function ExtraProps() {
   )
 }
 
-ScrollContent.story = {
-  name: 'Scroll Content',
+ExtraProps.args = {
+  primary: true,
+  label: 'Extra Props',
 }
 
 const textStyles = css`
@@ -69,11 +67,6 @@ export function ScrollContent() {
           enabledScroll: true,
         }}
         label="Overflow and enable body scroll"
-        css={css`
-          position: fixed;
-          top: 0.9em;
-          left: 0.9em;
-        `}
       />
       <main css={textStyles}>
         <p>
@@ -114,8 +107,9 @@ export function ScrollContent() {
   )
 }
 
-SideEffect.story = {
-  name: 'Side Effect',
+ScrollContent.args = {
+  primary: true,
+  label: 'Scroll Content',
 }
 
 export function SideEffect() {
@@ -132,8 +126,8 @@ export function SideEffect() {
   )
 }
 
-Component.story = {
-  name: 'Passing a Component',
+SideEffect.args = {
+  label: 'Side Effect',
 }
 
 export function Component() {
@@ -168,4 +162,8 @@ function CustomComponent({}) {
       <p>World</p>
     </div>
   )
+}
+
+Component.args = {
+  label: 'Passing a Component',
 }

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react'
-import { ModalContext } from '../../src'
+import { ModalContext } from '../..'
 
 function ModalLauncher({ modal, label = 'Open Modal!', ...props }) {
   const { openModal } = useContext(ModalContext)

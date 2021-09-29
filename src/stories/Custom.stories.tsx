@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { ModalProvider } from '../src'
+import { Meta } from '@storybook/react'
+import { ModalProvider } from '..'
 import {
   ModalLauncher,
   ModalLauncherWithTimer,
@@ -11,12 +12,8 @@ import {
 } from './Modals'
 
 export default {
-  title: 'Custom Modals',
-}
-
-SkipMotionGlobal.story = {
-  name: 'Skip Motion Globally',
-}
+  title: 'Modal/Custom',
+} as Meta
 
 export function SkipMotionGlobal() {
   return (
@@ -37,8 +34,8 @@ export function SkipMotionGlobal() {
   )
 }
 
-SkipMotionLocally.story = {
-  name: 'Skip Motion Locally',
+SkipMotionGlobal.args = {
+  label: 'Skip Motion Globally',
 }
 
 export function SkipMotionLocally() {
@@ -61,8 +58,8 @@ export function SkipMotionLocally() {
   )
 }
 
-CustomDragGlobally.story = {
-  name: 'Custom Drag Globally',
+SkipMotionLocally.args = {
+  label: 'Skip Motion Locally',
 }
 
 export function CustomDragGlobally() {
@@ -110,8 +107,8 @@ export function CustomDragGlobally() {
   )
 }
 
-CustomDragLocally.story = {
-  name: 'Custom Drag Locally',
+CustomDragGlobally.args = {
+  label: 'Custom Drag Globally',
 }
 
 export function CustomDragLocally() {
@@ -137,8 +134,8 @@ export function CustomDragLocally() {
   )
 }
 
-CleanInnerAnimations.story = {
-  name: 'Clean Inner Animations Props Globally',
+CustomDragLocally.args = {
+  label: 'Custom Drag Locally',
 }
 
 export function CleanInnerAnimations() {
@@ -160,8 +157,8 @@ export function CleanInnerAnimations() {
   )
 }
 
-CustomAnimate.story = {
-  name: 'Custom Animate Props Globally',
+CleanInnerAnimations.args = {
+  label: 'Clean Inner Animations Props Globally',
 }
 
 export function CustomAnimate() {
@@ -178,8 +175,8 @@ export function CustomAnimate() {
   )
 }
 
-DisableCloseFromLauncher.story = {
-  name: 'Disable Close From Launcher',
+CustomAnimate.args = {
+  label: 'Custom Animate Props Globally',
 }
 
 export function DisableCloseFromLauncher() {
@@ -194,8 +191,8 @@ export function DisableCloseFromLauncher() {
   )
 }
 
-DisableCloseFromModal.story = {
-  name: 'Disable Close From Inner Modal',
+DisableCloseFromLauncher.args = {
+  label: 'Disable Close From Launcher',
 }
 
 export function DisableCloseFromModal() {
@@ -206,8 +203,8 @@ export function DisableCloseFromModal() {
   )
 }
 
-LaunchAnother.story = {
-  name: 'Launch another Modal from inside Modal',
+DisableCloseFromModal.args = {
+  label: 'Disable Close From Inner Modal',
 }
 
 export function LaunchAnother() {
@@ -216,4 +213,8 @@ export function LaunchAnother() {
       <ModalLauncher modal={{ type: 'switch' }} label="Modal " />
     </ModalProvider>
   )
+}
+
+LaunchAnother.args = {
+  label: 'Launch another Modal from inside Modal',
 }
