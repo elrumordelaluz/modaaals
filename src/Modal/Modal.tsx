@@ -47,8 +47,6 @@ const Modal: React.FC<ModalProps> = ({
       : modal
     : { type: null }
 
-  console.log({ modal })
-
   let modalProps = {
     openModal,
     closeModal,
