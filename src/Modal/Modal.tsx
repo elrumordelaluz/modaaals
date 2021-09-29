@@ -56,7 +56,8 @@ const Modal: React.FC<ModalProps> = ({
     ...restProps,
   }
 
-  const getStyles = stylesMatcher({ ...styles, ...stylesOverride })
+  const stls = { ...styles, ...stylesOverride }
+  const getStyles = stylesMatcher(stls)
 
   const dragValue =
     dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
@@ -74,7 +75,7 @@ const Modal: React.FC<ModalProps> = ({
             drag={dragValue}
             dragConstraints={dragConstraints || dragConstraintsOverride}
             constraintsRef={constraintsRef}
-            styles={styles}
+            styles={stls}
             motionProps={motionProps || motionProspOverride}
             className={className}
           >
