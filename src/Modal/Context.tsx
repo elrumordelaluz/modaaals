@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useOpenClose } from '../utils'
-import Modal, {
-  ComponentsMap,
-  ModalOptions,
-  StylesObj,
-  defaultStyles,
-  ExtraProps,
-} from './Modal'
-
+import Modal, { ComponentsMap, ModalOptions, ExtraProps } from './Modal'
+import { StylesObj, defaultStyles } from './styles'
 const defaultState = {
   modal: null,
   openModal: () => {},

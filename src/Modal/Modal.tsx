@@ -1,7 +1,4 @@
-/** @jsxRuntime classic */ /** @jsx jsx */ import {
-  jsx,
-  Interpolation,
-} from '@emotion/react'
+/** @jsxRuntime classic */ /** @jsx jsx */ import { jsx } from '@emotion/react'
 import React, {
   useRef,
   createElement,
@@ -12,7 +9,7 @@ import React, {
 import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
 import { FocusScope } from '@react-aria/focus'
 import { RemoveScroll } from 'react-remove-scroll'
-
+import { defaultStyles, stylesMatcher, StylesObj } from './styles'
 import Portal from './Portal'
 import CloseIcon from './CloseIcon'
 
@@ -42,12 +39,15 @@ const Modal: React.FC<ModalProps> = ({
     dragConstraints: dragConstraintsOverride,
     enabledScroll: enabledScrollOverride,
     motionProps: motionProspOverride,
+    styles: stylesOverride,
     ...restProps
   }: SingleModalType = modal
     ? typeof modal === 'string'
       ? { type: modal }
       : modal
     : { type: null }
+
+  console.log({ modal })
 
   let modalProps = {
     openModal,
@@ -58,23 +58,17 @@ const Modal: React.FC<ModalProps> = ({
     ...restProps,
   }
 
-  const getStyles = (key: StylesKeys): {} => {
-    const base = defaultStyles[key]()
-    base.boxSizing = 'border-box'
-    if (styles[key]) {
-      return styles[key](base)
-    }
-    return base
-  }
+  const getStyles = stylesMatcher({ ...styles, ...stylesOverride })
 
   const dragValue =
     dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
+
   return modal ? (
     <Portal skipMotion={skipMotion || skipMotionOverride} style={portalStyle}>
       <FocusScope contain autoFocus restoreFocus>
         <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
-          <div onClick={closeModal} css={getStyles('overlay')}>
-            <div ref={constraintsRef} css={getStyles('constraints')} />
+          <div onClick={closeModal} css={getStyles('overlay', {})}>
+            <div ref={constraintsRef} css={getStyles('constraints', {})} />
           </div>
 
           <ModalContent
@@ -82,17 +76,17 @@ const Modal: React.FC<ModalProps> = ({
             drag={dragValue}
             dragConstraints={dragConstraints || dragConstraintsOverride}
             constraintsRef={constraintsRef}
-            styles={getStyles('contentOuter')}
+            styles={styles}
             motionProps={motionProps || motionProspOverride}
             className={className}
           >
-            <button css={getStyles('closeButton')} onClick={closeModal}>
+            <button css={getStyles('closeButton', {})} onClick={closeModal}>
               <CloseIcon />
             </button>
             {isValidElement(modal) ? (
               modal
             ) : (
-              <div css={getStyles('contentInner')}>
+              <div css={getStyles('contentInner', {})}>
                 {modalType && typeof modals[modalType] !== 'undefined'
                   ? createElement(modals[modalType], modalProps)
                   : null}
@@ -125,13 +119,15 @@ const ModalContent: React.FC<ContentProps> = ({
         : false
       : dragConstraints
 
+  const getStyles = stylesMatcher(styles)
+
   return skipMotion ? (
-    <div css={styles} className={className}>
+    <div css={getStyles('contentOuter', {})} className={className}>
       {children}
     </div>
   ) : (
     <motion.div
-      css={styles}
+      css={getStyles('contentOuter', {})}
       dragConstraints={customDragConstraints}
       drag={drag}
       className={className}
@@ -146,20 +142,7 @@ const ModalContent: React.FC<ContentProps> = ({
 export type ContentProps = ExtraProps & {
   children?: React.ReactNode
   constraintsRef?: React.RefObject<any>
-  styles?: Interpolation<React.CSSProperties>
-}
-
-export type StyleFn = (provided: React.CSSProperties) => React.CSSProperties
-
-export type StylesKeys =
-  | 'overlay'
-  | 'constraints'
-  | 'contentOuter'
-  | 'contentInner'
-  | 'closeButton'
-
-export type StylesObj = {
-  [key in StylesKeys]?: StyleFn
+  styles: StylesObj
 }
 
 export type ModalProps = ExtraProps & {
@@ -181,6 +164,7 @@ export type ExtraProps = {
   enabledScroll?: boolean
   motionProps?: MotionProps
   className?: string
+  styles?: StylesObj
 }
 
 export type MotionProps = {
@@ -217,56 +201,3 @@ export type DragConstraintsType =
   | undefined
 
 export default Modal
-
-export const defaultStyles: { [key: string]: any } = {
-  overlay: () => ({
-    position: 'fixed',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    backgroundColor: 'rgba(42, 38, 33, 0.5)',
-  }),
-  constraints: () => ({
-    position: 'absolute',
-    top: '10vh',
-    right: '10vh',
-    bottom: '10vh',
-    left: '10vh',
-  }),
-  contentOuter: () => ({
-    position: 'fixed',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    overflow: 'auto',
-    background: '#fcf7f6',
-    borderWidth: 1,
-    borderStyle: 'solid',
-    borderColor: 'rgba(0, 0, 0, 0.2)',
-    borderRadius: 24,
-    boxShadow: '0 10px 60px rgba(0, 0, 0, 0.15)',
-  }),
-  contentInner: () => ({
-    overflow: 'auto',
-    maxHeight: '60vh',
-    margin: '83px 152px 68px',
-  }),
-  closeButton: () => ({
-    width: '16px',
-    height: '16px',
-    border: 0,
-    outline: 0,
-    background: 'none',
-    padding: 0,
-    color: '#56595f',
-    cursor: 'pointer',
-    position: 'absolute',
-    top: '38px',
-    left: '38px',
-    transition: 'color 0.3s',
-    '&: hover': {
-      color: 'var(--accent)',
-    },
-  }),
-}
