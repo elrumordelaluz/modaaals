@@ -6,7 +6,12 @@ import React, {
   Dispatch,
   SetStateAction,
 } from 'react'
-import { motion, AnimationControls, TargetAndTransition } from 'framer-motion'
+import {
+  motion,
+  AnimatePresence,
+  AnimationControls,
+  TargetAndTransition,
+} from 'framer-motion'
 import { FocusScope } from '@react-aria/focus'
 import { RemoveScroll } from 'react-remove-scroll'
 import { defaultStyles, stylesMatcher, StylesObj } from './styles'
@@ -125,16 +130,17 @@ const ModalContent: React.FC<ContentProps> = ({
       {children}
     </div>
   ) : (
-    <motion.div
-      css={getStyles('contentOuter', {})}
-      dragConstraints={customDragConstraints}
-      drag={drag}
-      className={className}
-      initial
-      {...motionProps}
-    >
-      {children}
-    </motion.div>
+    <AnimatePresence>
+      <motion.div
+        css={getStyles('contentOuter', {})}
+        dragConstraints={customDragConstraints}
+        drag={drag}
+        className={className}
+        {...motionProps}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
   )
 }
 
