@@ -8,7 +8,11 @@ export default {
 
 export const SuperSimple = () => {
   return (
-    <ModalProvider modals={{ simple: Modal }} className="holaaaa">
+    <ModalProvider
+      modals={{ simple: Modal }}
+      onCloseModal={(modal) => console.log(modal)}
+      className="holaaaa"
+    >
       <App />
     </ModalProvider>
   )

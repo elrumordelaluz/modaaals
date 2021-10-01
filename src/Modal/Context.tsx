@@ -43,7 +43,7 @@ const ModalProvider: React.FC<ProviderProps> = ({
   function closeModal() {
     if (!isDisabled) {
       if (onCloseModal && typeof onCloseModal === 'function') {
-        onCloseModal()
+        onCloseModal(modal)
       }
       openModal(null)
     }
@@ -86,5 +86,5 @@ type ProviderProps = ExtraProps & {
   // classNames?: object
   styles?: StylesObj
   portalStyle?: React.CSSProperties
-  onCloseModal?: () => void
+  onCloseModal?: (modal?: ComponentsMap) => void
 }
