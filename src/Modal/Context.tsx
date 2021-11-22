@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { useOpenClose } from '../utils'
 import Modal, { ComponentsMap, ModalOptions, ExtraProps } from './Modal'
 import { StylesObj, defaultStyles } from './styles'
@@ -78,6 +78,10 @@ const ModalProvider: React.FC<ProviderProps> = ({
 export default ModalContext
 
 export { ModalProvider }
+
+export function useModaaals() {
+  return useContext(ModalContext)
+}
 
 type ProviderProps = ExtraProps & {
   children?: React.ReactNode
