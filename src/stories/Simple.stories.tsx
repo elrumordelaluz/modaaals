@@ -25,6 +25,9 @@ function App() {
       onClick={() =>
         openModal({
           type: 'simple',
+          onClick: () => {
+            openModal('simple')
+          },
           styles: {
             closeButton: (base: any) => ({
               ...base,

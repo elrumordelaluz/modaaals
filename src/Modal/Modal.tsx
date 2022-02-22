@@ -45,6 +45,7 @@ const Modal: React.FC<ModalProps> = ({
     enabledScroll: enabledScrollOverride,
     motionProps: motionProspOverride,
     styles: stylesOverride,
+    onClick: onClickOverride,
     ...restProps
   }: SingleModalType = modal
     ? typeof modal === 'string'
@@ -67,11 +68,19 @@ const Modal: React.FC<ModalProps> = ({
   const dragValue =
     dragOverride !== undefined ? dragOverride : drag !== undefined ? drag : true
 
+  function onClick() {
+    if (onClickOverride) {
+      onClickOverride()
+    } else {
+      closeModal()
+    }
+  }
+
   return modal ? (
     <Portal skipMotion={skipMotion || skipMotionOverride} style={portalStyle}>
       <FocusScope contain autoFocus restoreFocus>
         <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
-          <div onClick={closeModal} css={getStyles('overlay', {})}>
+          <div onClick={onClick} css={getStyles('overlay', {})}>
             <div ref={constraintsRef} css={getStyles('constraints', {})} />
           </div>
 
@@ -84,7 +93,7 @@ const Modal: React.FC<ModalProps> = ({
             motionProps={motionProps || motionProspOverride}
             className={className}
           >
-            <button css={getStyles('closeButton', {})} onClick={closeModal}>
+            <button css={getStyles('closeButton', {})} onClick={onClick}>
               <CloseIcon />
             </button>
             {isValidElement(modal) ? (
@@ -170,6 +179,7 @@ export type ExtraProps = {
   motionProps?: MotionProps
   className?: string
   styles?: StylesObj
+  onClick?: () => void
 }
 
 export type MotionProps = {
