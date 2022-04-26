@@ -78,7 +78,7 @@ const Modal: React.FC<ModalProps> = ({
 
   return modal ? (
     <Portal skipMotion={skipMotion || skipMotionOverride} style={portalStyle}>
-      <FocusScope contain autoFocus restoreFocus>
+      <FocusScope autoFocus restoreFocus>
         <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
           <div onClick={onClick} css={getStyles('overlay', {})}>
             <div ref={constraintsRef} css={getStyles('constraints', {})} />
