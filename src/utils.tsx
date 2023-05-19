@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { KEY_ESCAPE } from 'keycode-js'
 
 export function useOpenClose(
@@ -25,15 +25,13 @@ export function useOpenClose(
   return [isOpen, setOpen]
 }
 
-import { useRef } from 'react'
-
-const safeDocument: Document = document
-
 /**
  * Usage:
  * const [blockScroll, allowScroll] = useScrollBlock();
  * Source: https://gist.github.com/reecelucas/2f510e6b8504008deaaa52732202d2da
  */
+const safeDocument: Document = document
+
 export const useScrollBlock = (): [() => void, () => void] => {
   const scrollBlocked = useRef(false)
   const html = safeDocument.documentElement
@@ -41,7 +39,9 @@ export const useScrollBlock = (): [() => void, () => void] => {
 
   const blockScroll = (): void => {
     if (!body || !body.style || scrollBlocked.current) return
-    if (document == undefined) return
+    if (typeof window === 'undefined') {
+      return
+    }
 
     const scrollBarWidth = window.innerWidth - html.clientWidth
     const bodyPaddingRight =
