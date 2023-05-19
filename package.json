@@ -48,9 +48,8 @@
     "typescript": "4.6.3"
   },
   "dependencies": {
-    "@react-aria/focus": "3.5.4",
-    "keycode-js": "3.1.0",
-    "react-remove-scroll": "2.5.1"
+    "@react-aria/focus": "3.12.0",
+    "keycode-js": "3.1.0"
   },
   "peerDependencies": {
     "@emotion/react": "11x",

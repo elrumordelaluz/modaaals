@@ -5,6 +5,7 @@ import React, {
   isValidElement,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from 'react'
 import {
   motion,
@@ -13,10 +14,10 @@ import {
   TargetAndTransition,
 } from 'framer-motion'
 import { FocusScope } from '@react-aria/focus'
-import { RemoveScroll } from 'react-remove-scroll'
 import { defaultStyles, stylesMatcher, StylesObj } from './styles'
 import Portal from './Portal'
 import CloseIcon from './CloseIcon'
+import { useScrollBlock } from '../utils'
 
 const Modal: React.FC<ModalProps> = ({
   modals = {},
@@ -76,37 +77,45 @@ const Modal: React.FC<ModalProps> = ({
     }
   }
 
+  const [blockScroll, allowScroll] = useScrollBlock()
+
+  useEffect(() => {
+    if (modal && (!enabledScroll || !enabledScrollOverride)) {
+      blockScroll()
+    } else {
+      allowScroll()
+    }
+  }, [modal, blockScroll, allowScroll])
+
   return modal ? (
     <Portal skipMotion={skipMotion || skipMotionOverride} style={portalStyle}>
       <FocusScope autoFocus restoreFocus>
-        <RemoveScroll enabled={!enabledScroll || !enabledScrollOverride}>
-          <div onClick={onClick} css={getStyles('overlay', {})}>
-            <div ref={constraintsRef} css={getStyles('constraints', {})} />
-          </div>
+        <div onClick={onClick} css={getStyles('overlay', {})}>
+          <div ref={constraintsRef} css={getStyles('constraints', {})} />
+        </div>
 
-          <ModalContent
-            skipMotion={skipMotion || skipMotionOverride}
-            drag={dragValue}
-            dragConstraints={dragConstraints || dragConstraintsOverride}
-            constraintsRef={constraintsRef}
-            styles={stls}
-            motionProps={motionProps || motionProspOverride}
-            className={className}
-          >
-            <button css={getStyles('closeButton', {})} onClick={onClick}>
-              <CloseIcon />
-            </button>
-            {isValidElement(modal) ? (
-              modal
-            ) : (
-              <div css={getStyles('contentInner', {})}>
-                {modalType && typeof modals[modalType] !== 'undefined'
-                  ? createElement(modals[modalType], modalProps)
-                  : null}
-              </div>
-            )}
-          </ModalContent>
-        </RemoveScroll>
+        <ModalContent
+          skipMotion={skipMotion || skipMotionOverride}
+          drag={dragValue}
+          dragConstraints={dragConstraints || dragConstraintsOverride}
+          constraintsRef={constraintsRef}
+          styles={stls}
+          motionProps={motionProps || motionProspOverride}
+          className={className}
+        >
+          <button css={getStyles('closeButton', {})} onClick={onClick}>
+            <CloseIcon />
+          </button>
+          {isValidElement(modal) ? (
+            modal
+          ) : (
+            <div css={getStyles('contentInner', {})}>
+              {modalType && typeof modals[modalType] !== 'undefined'
+                ? createElement(modals[modalType], modalProps)
+                : null}
+            </div>
+          )}
+        </ModalContent>
       </FocusScope>
     </Portal>
   ) : null
