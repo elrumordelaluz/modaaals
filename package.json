@@ -54,8 +54,8 @@
     "react-remove-scroll": "^2.5.7"
   },
   "peerDependencies": {
-    "@emotion/react": ">11",
-    "framer-motion": ">5",
-    "react": ">16"
+    "@emotion/react": ">=11",
+    "framer-motion": ">=5",
+    "react": ">=16"
   }
 }
